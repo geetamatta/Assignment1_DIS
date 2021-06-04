@@ -128,7 +128,6 @@ namespace Assignment1
                 }
                 return (total == 26);
             }
-
             catch (Exception)
             {
                 throw;
@@ -143,7 +142,6 @@ namespace Assignment1
             try
             {
                 int ans = 0;
-
                 for (int i = 0; i < nums.Length - 1; i++)
                 {
                     for (int j = i + 1; j < nums.Length; j++)
@@ -176,8 +174,6 @@ namespace Assignment1
                     prefix[i] = sum;
                     sum += nums[i];
                 }
-
-
                 for (int i = 0; i < len; i++)
                 {
                     if (prefix[i] == prefix[len - 1] - prefix[i] - nums[i] + nums[len - 1])
@@ -185,7 +181,6 @@ namespace Assignment1
                         return i;
                     }
                 }
-
                 return -1;
             }
             catch (Exception e)
@@ -204,16 +199,10 @@ namespace Assignment1
             try
             {
                 string result = "";
-
-
                 for (int i = 0; i < word1.Length || i < word2.Length; i++)
                 {
-
-
                     if (i < word1.Length)
                         result += word1[i];
-
-
                     if (i < word2.Length)
                         result += word2[i];
                 }
@@ -246,11 +235,8 @@ namespace Assignment1
                     {
                         result += word.Substring(1) + word[0] + "ma" + suffix + " ";
                     }
-
                     suffix += "a";
-
                 }
-
                 return result.Substring(0, result.Length - 1);
             }
             catch (Exception)
