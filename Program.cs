@@ -106,27 +106,16 @@ namespace Assignment1
         }
 
     }
+    /* LOGIC: We have considered that the robot initially starts at the origin (0,0) I have declared the initial moves of the robot as 0,0 in this case
+     the values are stored in an array and this array has increment variables declared in a for loop and increment the x and y coordinate values accordingly 
+    based on the values provided by the user it would return values and would return us the final position of the robot and let us know if it has reached the initial position*/
     public class Question2
     {
         public static bool CheckIfPangram(string str)
         {
             try
             {
-                bool[] isUsed = new bool[26];
-                int ai = (int)'a';
-                int total = 0;
-
-                for (CharEnumerator en = str.ToLower().GetEnumerator(); en.MoveNext();)
-                {
-                    int d = (int)en.Current - ai;
-                    if (d >= 0 && d < 26)
-                        if (!isUsed[d])
-                        {
-                            isUsed[d] = true;
-                            total++;
-                        }
-                }
-                return (total == 26);
+                return (str.GroupBy(i => i).Count() == 26);
             }
             catch (Exception)
             {
@@ -135,24 +124,29 @@ namespace Assignment1
 
         }
     }
+
+    /*LOGIC: In this scenario we have considered the option of storing the string provided by the user in the variable "CheckIfPangram" the string provided by the user is grouped together
+     * using the group by function and is compared to the count, if it is equal to 26 after being grouped based on a key value, else an exception is occured if it fails in the loop,
+     post the evaluation of a valid block execution it returns the value either in the parent class "Question2" if the given value is a pangram or not.*/
     class Question3
     {
         public static int NumIdenticalPairs(int[] nums)
         {
             try
             {
-                int ans = 0;
-                for (int i = 0; i < nums.Length - 1; i++)
+                int count = 0;
+                int len = nums.Length;
+                for (int i = 0; i < len - 1; i++)
                 {
-                    for (int j = i + 1; j < nums.Length; j++)
+                    for (int j = i + 1; j < len; j++)
                     {
                         if (nums[i] == nums[j])
                         {
-                            ans++;
+                            count++;
                         }
                     }
                 }
-                return ans;
+                return count;
             }
             catch (Exception)
             {
@@ -160,27 +154,30 @@ namespace Assignment1
             }
         }
     }
+    /* LOGIC: We consider 2 indices i,j and try to form good pairs based on the user input, here we store it as the array the value len is the length of the array
+     and we run through the entire array given starting with a 0 index and for i we go all the way until len-1 and len for j. If nums[i]=nums[j] then we would increase the count variable
+    and return it to check the number of good pairs.*/
     class Question4
     {
         public static int PivotIndex(int[] nums)
         {
             try
             {
-                int len = nums.Length;
-                int sum = 0;
-                int[] prefix = new int[len];
-                for (int i = 0; i < len; i++)
+                if (nums.Length == 0) return -1;
+
+                int sl = 0, sr = nums.Sum() - nums[0];
+
+                if (sl == sr) return 0;
+
+                for (var i = 1; i < nums.Length; i++)
                 {
-                    prefix[i] = sum;
-                    sum += nums[i];
+                    sl += nums[i - 1];
+
+                    sr -= nums[i];
+
+                    if (sl == sr) return i;
                 }
-                for (int i = 0; i < len; i++)
-                {
-                    if (prefix[i] == prefix[len - 1] - prefix[i] - nums[i] + nums[len - 1])
-                    {
-                        return i;
-                    }
-                }
+
                 return -1;
             }
             catch (Exception e)
@@ -192,21 +189,30 @@ namespace Assignment1
         }
 
     }
+    /*LOGIC: Here the PivotIndex is defined by nums and if the length of nums = 0 then we return -1. sl (sum of left to pivot index) is defined as 0 and 
+     sr is defined as the sum to the right of index - the pivot index, if both the variables are equal then we return 0. The variable i is used to navigate through the array
+    now comparing it through the entire array, if sl=sr then we return the value i to be the pivot index*/
     class Question5
     {
-        public static string merge(string word1, string word2)
+        public static string merge(string 1word, string 2word)
         {
             try
             {
-                string result = "";
-                for (int i = 0; i < word1.Length || i < word2.Length; i++)
+                var sb = new StringBuilder();
+                for (int i = 0; i < Math.Min(1word.Length, 2word.Length); i++)
                 {
-                    if (i < word1.Length)
-                        result += word1[i];
-                    if (i < word2.Length)
-                        result += word2[i];
+                    sb.Append(1word[i]);
+                    sb.Append(2word[i]);
                 }
-                return result;
+                if (1word.Length > 2word.Length)
+                {
+                    sb.Append(1word.Substring(Math.Min(1word.Length, 2word.Length)));
+                }
+                else
+                {
+                    sb.Append(2word.Substring(Math.Min(1word.Length, 2word.Length)));
+                }
+                return sb.ToString();
             }
             catch (Exception e)
             {
@@ -216,31 +222,52 @@ namespace Assignment1
             }
         }
     }
+    /*LOGIC: In the above code we merge two strings word1 and word2, we have a variable sb stored in the stringbuilder function, we then calculate the length of the two strings
+     where the calculation of the length begins from 0 (i=0), the strings are appended using the append function, the lengths fof the two strings are compared
+    if the word1.length is greater than word2.length then the strings are appended based on their initial values using the math.min function, the string comparisons are stored using the ToString function.*/
     class Question6
     {
-        public static string ToGoatLatin(string sentence)
+        public static string ToGoatLatin(string word)
         {
             try
             {
-                var words = sentence.Split(' ');
-                string suffix = "a", result = "";
-                var vowels = new List<char>() { 'A', 'E', 'I', 'O', 'U', 'a', 'e', 'i', 'o', 'u' };
-                foreach (var word in words)
+                var words = word.Split(' ');
+                StringBuilder sb = new StringBuilder();
+                int count = 0;
+                foreach (string w in words)
                 {
-                    if (vowels.Any(x => x == word[0]))
+                    count++;
+                    // if the word starts from vowel
+                    if (
+                        w[0] == 'a' || w[0] == 'e' || w[0] == 'i' || w[0] == 'o' || w[0] == 'u' ||
+                        w[0] == 'A' || w[0] == 'E' || w[0] == 'I' || w[0] == 'O' || w[0] == 'U'
+                      )
                     {
-                        result += word + "ma" + suffix + " ";
+                        sb.Append(w);
                     }
+                    // if the word is a consonant
                     else
                     {
-                        result += word.Substring(1) + word[0] + "ma" + suffix + " ";
+                        for (int i = 1; i < w.Length; i++)
+                            sb.Append(w[i]);
+                        // append first word in the end
+                        sb.Append(w[0]);
                     }
-                    suffix += "a";
+                    //converting it to the goat thing
+                    sb.Append("ma");
+
+                    for (int i = 0; i < count; i++)
+                        sb.Append('a');
+                    // skip space for the last word
+                    if (count < words.Length)
+                        sb.Append(' ');
                 }
-                return result.Substring(0, result.Length - 1);
+
+                return sb.ToString();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 throw;
             }
         }
@@ -248,6 +275,9 @@ namespace Assignment1
 
 
 }
+/* LOGIC: In the above code we will split the word into different charectors, and then if the first charector is a vowel, 
+ * then we will add "ma" after the last charector and then all of this is concatinated using the stringbuilder. Else if the word starts with 
+ * a consonant then the first charector which is a consonant will be added in the last followed by "ma".
 
 
 
